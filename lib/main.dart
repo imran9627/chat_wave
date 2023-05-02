@@ -1,22 +1,25 @@
 import 'dart:async';
-
 import 'package:chat_wave/firebase_options.dart';
-import 'package:chat_wave/sereens/user_registration.dart';
+import 'package:chat_wave/utils/consts/app_consts.dart';
+import 'package:chat_wave/utils/provider.dart';
+import 'package:chat_wave/views/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(MyApp());
+  runApp(chatWaveProvider);
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Splash(),
+    return  MaterialApp(
+        home: Splash(),
+
     );
   }
 }
@@ -34,7 +37,7 @@ class _SplashState extends State<Splash> {
         Duration(seconds: 3),
         () => Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const UserRegistration()),
+              MaterialPageRoute(builder: (context) => const LoginPage()),
             ));
   }
 
@@ -45,11 +48,11 @@ class _SplashState extends State<Splash> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Welcome To Smart Talk',
+            AppConsts.appTitle,
             style: TextStyle(
               //color: Colors.white,
 
-              fontSize: 25,
+              fontSize: AppTextSize.largeText,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -58,11 +61,11 @@ class _SplashState extends State<Splash> {
             fit: BoxFit.cover,
           ),
           const Text(
-            'Smartest Communication Application',
+            AppConsts.appSplashSubTitle,
             style: TextStyle(
               //color: Colors.white,
 
-              fontSize: 18,
+              fontSize: AppTextSize.mediumText,
               fontWeight: FontWeight.bold,
             ),
           ),

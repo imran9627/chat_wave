@@ -1,4 +1,7 @@
+/*
+
 import 'package:chat_wave/utils/consts/app_consts.dart';
+import 'package:chat_wave/widgets/pop_up_menu.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabs extends StatefulWidget {
@@ -44,6 +47,13 @@ class _CustomTabsState extends State<CustomTabs>
       initialIndex: 1,
       child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: const Text(
+              AppConsts.appTitle,
+              style: TextStyle(fontSize: 16),
+            ),
+            leadingWidth: 100,
+            actions: const [CustomPopUpMenu()],
             bottom: TabBar(
               labelColor: Colors.white,
               // controller: tabController,
@@ -76,3 +86,4 @@ class MyLabel extends StatelessWidget {
     );
   }
 }
+*/
