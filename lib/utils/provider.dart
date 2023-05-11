@@ -1,4 +1,5 @@
 import 'package:chat_wave/main.dart';
+import 'package:chat_wave/models/chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,5 +14,6 @@ Widget get chatWaveProvider{
     ChangeNotifierProvider<FirebaseDataSource>(
       create: (context) => FirebaseDataSource(),
     ),
+
   ], child:  MyApp(),);
 }

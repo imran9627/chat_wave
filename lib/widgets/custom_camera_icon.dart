@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CameraIcon extends StatelessWidget {
-  const CameraIcon({Key? key}) : super(key: key);
+
+  void Function() onPressed;
+   CameraIcon({Key? key, required this.onPressed} ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +16,7 @@ class CameraIcon extends StatelessWidget {
       bottom: -10,
       right: -10,
       child: IconButton(
-        onPressed: () {
-          firebaseServicesProvider.pickedImage();
-        },
+        onPressed: onPressed,
         icon: const Icon(
           Icons.camera_alt,
           color: AppColors.amber,

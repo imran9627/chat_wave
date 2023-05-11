@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:chat_wave/db_handler/collection_references.dart';
 import 'package:chat_wave/utils/consts/app_consts.dart';
@@ -31,33 +32,41 @@ class FirebaseDataSource extends ChangeNotifier {
   }
 */
 
-  pickedImage() async {
+ static Future<File?> pickedImage() async {
     final imagePicker = ImagePicker();
     XFile? image;
     //Check Permissions
     //Select Image
     image = await imagePicker.pickImage(source: ImageSource.gallery);
-    var file = File(image!.path);
-    print('file : $file');
-    if (image.path.isNotEmpty) {
-      //Upload to Firebase
+    if(image != null){
+    var file = File(image.path);
+    return file;
+    }
+    return null;
 
-      await DBHandler.addUserImage(imgPath: 'images/').putFile(file);
+
+   /* log('/////////////////////////////////////////////////////imagePath :${image.path}');
+    if (file.path.isNotEmpty) {
+      //Upload to Firebase
+     String url = await uploadImage(imageFile:file );
+     //DBHandler.updateUser(name, about, image);
+      //await DBHandler.addUserImage(imgPath: 'images/').putFile(url);
 
       notifyListeners();
     } else {
-      print('No Image Path Received');
-    }
+      print('No Image Path Received');*/
+   // }
   }
 
-  Future<String> uploadImage({var imageFile}) async {
-    var snapshot = FirebaseStorage.instance.ref('images/');
+ static Future<String> uploadImage({var imageFile}) async {
+    var snapshot = FirebaseStorage.instance.ref(DBHandler.user!.uid);
+      await  snapshot.putFile(imageFile);
     var downloadUrl = await snapshot.getDownloadURL();
     print('.............Image URL.........$downloadUrl');
     return downloadUrl;
   }
   
-  static Future<void> verifyOtp(String phoneNumber, BuildContext context) async{
+/*  static Future<void> verifyOtp(String phoneNumber, BuildContext context) async{
     FirebaseAuth auth = FirebaseAuth.instance;
 
     await auth.verifyPhoneNumber(
@@ -69,7 +78,7 @@ class FirebaseDataSource extends ChangeNotifier {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) =>  HomePage(),
             ));
       },
       verificationFailed: (FirebaseAuthException e) {
@@ -93,5 +102,5 @@ class FirebaseDataSource extends ChangeNotifier {
         
       },
     );
-  }
+  }*/
 }

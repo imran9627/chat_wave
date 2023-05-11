@@ -10,6 +10,9 @@ class CustomListTile extends StatelessWidget {
   final String subTitle;
   final String? timeStamp;
   final VoidCallback? onTap;
+  final Color? backColor;
+  final double? elevation;
+  final EdgeInsetsGeometry? contentPadding;
 
   const CustomListTile(
       {Key? key,
@@ -17,26 +20,35 @@ class CustomListTile extends StatelessWidget {
       required this.title,
       required this.subTitle,
       this.onTap,
+        this.elevation =2,
+        this.backColor,
+        this.contentPadding,
       this.timeStamp})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      leading: CustomAvatar(child: avatar),
-      title: CustomText(
-        title: title,
-        fontSize: AppTextSize.largeText,
+    return Card(
+      elevation: elevation,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ListTile(
+        onTap: onTap,
+         textColor: backColor,
+        contentPadding: contentPadding,
+        leading: CustomAvatar(child: avatar),
+        title: CustomText(
+          title: title,
+          fontSize: AppTextSize.largeText,
+        ),
+        subtitle: CustomText(
+          title: subTitle,textColor: Colors.black54,
+        ),
+        trailing: timeStamp == null
+            ? const SizedBox()
+            : CustomText(
+                title: '$timeStamp',
+              ),
       ),
-      subtitle: CustomText(
-        title: subTitle,
-      ),
-      trailing: timeStamp == null
-          ? SizedBox()
-          : CustomText(
-              title: '$timeStamp',
-            ),
     );
   }
 }

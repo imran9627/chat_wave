@@ -29,5 +29,5 @@ class AppColors {
 }
 
 class Collections{
-  static const userDataCollection = 'userDataCollection';
+  static const userDataCollection = 'users';
 }
