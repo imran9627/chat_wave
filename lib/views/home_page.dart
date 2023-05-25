@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_wave/db_handler/collection_references.dart';
 import 'package:chat_wave/models/chat_model.dart';
+import 'package:chat_wave/models/messages_model.dart';
 import 'package:chat_wave/utils/consts/app_consts.dart';
 import 'package:chat_wave/views/chat_page.dart';
 import 'package:chat_wave/views/user_profile.dart';
 import 'package:chat_wave/widgets/custom_list_tile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasData) {
                     listOfUsers = snapshot.data!;
+
                     return isSearching
                         ? ListView.builder(
                             dragStartBehavior: DragStartBehavior.start,
@@ -147,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                       width: MediaQuery.of(context).size.width *
                                           0.1,
                                       height:
-                                          MediaQuery.of(context).size.width *
+                                          MediaQuery.of(context).size.height *
                                               0.1,
                                       fit: BoxFit.fill,
                                       imageUrl: '${searchList[index].image}',
@@ -172,47 +175,65 @@ class _HomePageState extends State<HomePage> {
                         : ListView.builder(
                             itemCount: listOfUsers.length,
                             itemBuilder: (context, index) {
-                              return CustomListTile(
-                                onTap: () async {
-                                  var result = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatPage(
-                                            document: listOfUsers[index]),
-                                      ));
-                                  if (result != null) {
-                                    setState(() {
-                                      // Update the state of your widget to reflect the refreshed data
-                                    });
-                                  }
-                                },
-                                avatar: CircleAvatar(
-                                  child: ClipRRect(
+                              DBHandler.getLastMessage(listOfUsers[index]);
+                              return StreamBuilder<QuerySnapshot>(
+                                stream: DBHandler.getAllMessages(listOfUsers[index]),
+                                builder: (context, snapshot) {
+                                  Messages? message;
+                                  if(snapshot.hasData){
+                                    var data = snapshot.data!.docs;
 
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: CachedNetworkImage(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.1,
-                                      height:
-                                      MediaQuery.of(context).size.width *
-                                          0.1,
-                                      fit: BoxFit.fill,
-                                      imageUrl: '${listOfUsers[index].image}',
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.person),
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                              child:
-                                                  CircularProgressIndicator()),
+                                    if(data.isNotEmpty && data.first.exists){
+                                      message = Messages.fromJson(data.first
+                                          .data() as Map<String, dynamic>);
+
+                                    }
+                                  }
+
+                                  return CustomListTile(
+                                    onTap: () async {
+
+                                      var result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChatPage(
+                                                document: listOfUsers[index]),
+                                          ));
+                                      if (result != null) {
+                                        setState(() {
+                                          // Update the state of your widget to reflect the refreshed data
+                                        });
+                                      }
+                                    },
+                                    avatar: CircleAvatar(
+                                      child: ClipRRect(
+
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: CachedNetworkImage(
+                                          width: MediaQuery.of(context).size.width *
+                                              0.1,
+                                          height:
+                                          MediaQuery.of(context).size.width *
+                                              0.1,
+                                          fit: BoxFit.fill,
+                                          imageUrl: '${listOfUsers[index].image}',
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.person),
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                title: '${listOfUsers[index].name}',
-                                subTitle: '${listOfUsers[index].email}',
-                                timeStamp:
-                                    listOfUsers[index].isOnline == 'Online'
-                                        ? "Online"
-                                        : "Offline",
+                                    title: '${listOfUsers[index].name}',
+                                    subTitle: message != null ? message.msg : 'Hey, there i am using chat wave',
+                                    timeStamp:
+                                        listOfUsers[index].isOnline == 'Online'
+                                            ? "Online"
+                                            : "Offline",
+                                  );
+                                }
                               );
                             },
                           );

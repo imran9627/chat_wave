@@ -112,6 +112,7 @@ class _ChatPageState extends State<ChatPage> {
                           child: CircularProgressIndicator(),);
                       } else if (snapshot.hasData) {
                         final data = snapshot.data!.docs;
+
                         return ListView.builder(
                           reverse: true,
                           itemCount: data.length,
@@ -122,11 +123,13 @@ class _ChatPageState extends State<ChatPage> {
                         );
                       } else {
                         return const Center(
-                            child: Text('Some Thing went wrong'));
+                            child: Text('Hello 👋'));
                       }
                     },
                   )),
-              CustomChatInputBar(user: widget.document,)
+              CustomChatInputBar(user: widget.document,),
+
+
             ]),
       ),
     );

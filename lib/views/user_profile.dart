@@ -1,19 +1,11 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:chat_wave/db_handler/auth_provider.dart';
 import 'package:chat_wave/db_handler/collection_references.dart';
-import 'package:chat_wave/models/chat_model.dart';
-import 'package:chat_wave/models/user_info_model.dart';
 import 'package:chat_wave/repository/firebase_services/services.dart';
 import 'package:chat_wave/utils/consts/app_consts.dart';
 import 'package:chat_wave/widgets/custom_camera_icon.dart';
-import 'package:chat_wave/widgets/custom_list_tile.dart';
 import 'package:chat_wave/widgets/input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-
 import '../widgets/custom_avatar.dart';
 import '../widgets/custom_dialogs.dart';
 import 'login_page.dart';
@@ -43,9 +35,6 @@ class _UserProfileState extends State<UserProfile> {
     nameController = TextEditingController();
     aboutController = TextEditingController();
     emailController = TextEditingController();
-
-
-
 
 
   }

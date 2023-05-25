@@ -1,15 +1,11 @@
-import 'dart:developer';
+
 import 'dart:io';
 import 'package:chat_wave/db_handler/collection_references.dart';
-import 'package:chat_wave/utils/consts/app_consts.dart';
-import 'package:chat_wave/views/home_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../views/mobile_otp_screen.dart';
+
 
 class FirebaseDataSource extends ChangeNotifier {
   String? fetchImagePath;
@@ -44,7 +40,7 @@ class FirebaseDataSource extends ChangeNotifier {
     }
     return null;
 
-
+ }
    /* log('/////////////////////////////////////////////////////imagePath :${image.path}');
     if (file.path.isNotEmpty) {
       //Upload to Firebase
@@ -56,9 +52,31 @@ class FirebaseDataSource extends ChangeNotifier {
     } else {
       print('No Image Path Received');*/
    // }
+
+  static Future<List<XFile>>? multipleImages() async {
+    final imagePicker = ImagePicker();
+    //XFile? images;
+   List<XFile> images = await imagePicker.pickMultiImage(imageQuality: 70);
+   // for(var i in images){
+   //
+   // return file;
+   // }
+   return images;
+
+    }
+
+  static Future<XFile?> captureImageFromCamera() async {
+    final imagePicker = ImagePicker();
+    XFile? image;
+    image = await imagePicker.pickImage(source: ImageSource.camera,imageQuality: 70);
+    if (image != null) {
+      var file = File(image.path);
+      return image;
+    }
+    return null;
   }
 
- static Future<String> uploadImage({var imageFile}) async {
+    static Future<String> uploadImage({var imageFile}) async {
     var snapshot = FirebaseStorage.instance.ref(DBHandler.user!.uid);
       await  snapshot.putFile(imageFile);
     var downloadUrl = await snapshot.getDownloadURL();

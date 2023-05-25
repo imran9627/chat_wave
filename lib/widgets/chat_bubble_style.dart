@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_wave/db_handler/collection_references.dart';
 import 'package:chat_wave/models/messages_model.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class ChatBubble extends StatelessWidget {
               crossAxisAlignment:isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Container(
+                  padding: EdgeInsets.all(document.type == Type.image ? 4 :15),
                   decoration: BoxDecoration(
                       color: isMe ? Colors.green : Colors.grey,
                       borderRadius: isMe
@@ -48,28 +50,44 @@ class ChatBubble extends StatelessWidget {
                               bottomLeft: Radius.circular(20),
                               bottomRight: Radius.circular(20)),
                       border: Border.all(color: Colors.blue, width: 1)),
-                  child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: isMe
-                          ?
+                  child: isMe
+                      ? (document.type == Type.text
+                      ? Text(
+                    document.msg,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    maxLines: null,
+                  )
+                      : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                      width: MediaQuery.of(context).size.width*0.6,
+                      height: MediaQuery.of(context).size.height*0.4,
+                    fit: BoxFit.fill,
+                    imageUrl: document.msg,
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                   // errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                      )
+                  )
+                      : (document.type == Type.text
+                      ? Text(
+                    document.msg,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    maxLines: null,
+                  )
+                      : ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                    width: MediaQuery.of(context).size.width*0.6,
+                    height: MediaQuery.of(context).size.height*0.4,
+                    imageUrl: document.msg,
+                    fit: BoxFit.fill,
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                   // errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                      )
+                  ),
 
-                                Text(
-                                  document.msg,
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                  maxLines: null,
-                                )
-
-
-                          :
-                                Text(
-                                  document.msg,
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                  maxLines: null,
-                                ),
-
-                              ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width*0.15,

@@ -43,6 +43,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
+    DBHandler.getPushToken();
     Timer(
         const Duration(seconds: 3),
         () async {

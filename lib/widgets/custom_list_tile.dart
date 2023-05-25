@@ -42,7 +42,7 @@ class CustomListTile extends StatelessWidget {
         ),
         subtitle: CustomText(
           title: subTitle,textColor: Colors.black54,
-        ),
+          overflow: TextOverflow.ellipsis,),
         trailing: timeStamp == null
             ? const SizedBox()
             : CustomText(
