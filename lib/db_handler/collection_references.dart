@@ -74,7 +74,7 @@ class DBHandler {
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json',
             HttpHeaders
-                .authorizationHeader: "AAAAag0Xe40:APA91bHMKhLPY0EF-G43Fms9zQLEMrYZCtVEH6Ne40-GRixK7sZS-QMRmDLxMYJVxA4EibKO-3fsfLXck1QlP6aWVZMv-VAqJQrn_TXyryqSVSSs2s_qppugW_no_o72u5GPq8vWmnBC"
+                .authorizationHeader: "key=AAAAag0Xe40:APA91bHMKhLPY0EF-G43Fms9zQLEMrYZCtVEH6Ne40-GRixK7sZS-QMRmDLxMYJVxA4EibKO-3fsfLXck1QlP6aWVZMv-VAqJQrn_TXyryqSVSSs2s_qppugW_no_o72u5GPq8vWmnBC"
 
           }
 
@@ -168,7 +168,7 @@ class DBHandler {
     final ref = fireStoreData
         .collection('Chats/${getConversationId(chatModel.id!)}/Messages');
     ref.doc(time).set(messages.toJson()).then((value) {
-      sendPushNotification(chatModel, msg);
+      sendPushNotification(chatModel, type == Type.text ? msg : 'image');
     });
   }
 ////////////////////
@@ -229,5 +229,6 @@ class DBHandler {
       await sendMessage(chatModel, imageUrl, Type.image);
     }
   }
+
 
 }
