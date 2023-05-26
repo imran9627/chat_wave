@@ -171,7 +171,7 @@ class DBHandler {
       sendPushNotification(chatModel, msg);
     });
   }
-
+////////////////////
   static Future<void> updateReadMessage(Messages msg) async {
     final time = DateTime
         .now()
